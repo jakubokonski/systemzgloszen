@@ -1,13 +1,14 @@
 package system.issue;
 
+import system.observers.Observer;
+import system.observers.Publisher;
+import system.observers.Subject;
 import system.users.User;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Issue {
-
+public class Issue implements Publisher, Subject {
     private static AtomicInteger idGenerator = new AtomicInteger();
-
 
     private final int id;
     private final String title;
@@ -16,7 +17,6 @@ public class Issue {
     private User assignUser;
     private IssueType type;
     private IssuePriority priority;
-
 
     private Issue(IssueBuilder builder) {
         this.id = Issue.idGenerator.incrementAndGet();
@@ -30,6 +30,26 @@ public class Issue {
 
     public static IssueBuilder builder() {
         return new IssueBuilder();
+    }
+
+    @Override
+    public void publish() {
+
+    }
+
+    @Override
+    public void assignSubject(Observer o) {
+
+    }
+
+    @Override
+    public void unassignFromSubject(Observer o) {
+
+    }
+
+    @Override
+    public void notifyObservers() {
+
     }
 
     public static class IssueBuilder {

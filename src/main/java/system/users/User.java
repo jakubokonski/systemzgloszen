@@ -1,11 +1,12 @@
 package system.users;
 
 import system.issue.Issue;
+import system.observers.Observer;
 import system.users.interfaces.UserBehavior;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class User {
+public abstract class User implements Observer {
 
     private static AtomicInteger idGenerator = new AtomicInteger();
 //    private static Integer idGenerator = 0;
