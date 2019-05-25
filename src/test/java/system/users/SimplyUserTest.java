@@ -22,7 +22,26 @@ public class SimplyUserTest {
         SimplyUser simplyUser = new SimplyUser("Janek", "Kowalski", RoleType.USER, new IssueCommentReader());
 
         Assert.assertNotNull(simplyUser);
-        Issue issue = new Issue();
-        simplyUser.behave(issue);
+
+        Issue newIssue = Issue.builder()
+                .assignUser(simplyUser)
+                .creator(simplyUser)
+                .build();
+
+        simplyUser.behave(newIssue);
+        simplyUser.setBehavior(new DefaultBehavior());
+        simplyUser.behave(newIssue);
+    }
+
+    @Test
+    public void testId() {
+        SimplyUser firstUser = new SimplyUser("Janek", "Kowalski", RoleType.USER, new IssueCommentReader());
+        SimplyUser secondUser = new SimplyUser("Marek", "Kowalski", RoleType.USER, new IssueCommentReader());
+
+        Assert.assertEquals(firstUser.getId(), 1);
+        Assert.assertEquals(secondUser.getId(), 2);
+        System.out.println("FirstUser ID: " + firstUser.getId());
+        System.out.println("SecondUser ID: " + secondUser.getId());
+
     }
 }
