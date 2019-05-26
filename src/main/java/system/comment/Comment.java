@@ -1,76 +1,104 @@
 package system.comment;
 
+import system.users.User;
+
 import java.time.LocalDateTime;
 
 public abstract class Comment<T> {
 
-    private String creatorName;
-    private String modifiedBy;
-    private LocalDateTime created;
-    private LocalDateTime lastModified;
-    private T text;
+    private User creatorName;
+    private User modifiedBy;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    protected T content;
 
+    public Comment(User creatorName, T content) {
+        this.creatorName = creatorName;
+        this.modifiedBy = getModifiedBy();
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+        this.content = content;
+    }
 
     public void modifyComment() {
 
     }
 
-    public String getCreatorName() {
+    public User getCreatorName() {
         return creatorName;
     }
 
-    public String getModifiedBy() {
+    public User getModifiedBy() {
         return modifiedBy;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public LocalDateTime getLastModified() {
-        return lastModified;
+    public LocalDateTime getModifiedAt() {
+        return modifiedAt;
     }
 
-    public T getText() {
-        return text;
+    public T getContent() {
+        return content;
     }
 
-    public static class CommentBuilder<T> {
+    public void setModifiedBy(User modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
 
-        private String creatorName;
-        private String modifiedBy;
-        private LocalDateTime created;
-        private LocalDateTime lastModified;
-        private T text;
+    public void setModifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
 
-        public CommentBuilder() {
-        }
-
-        public CommentBuilder creatorName(String creatorName) {
-            this.creatorName = creatorName;
-            return this;
-        }
-
-        public CommentBuilder modifiedBy(String modifiedBy) {
-            this.modifiedBy = modifiedBy;
-            return this;
-        }
-
-        public CommentBuilder created(LocalDateTime created) {
-            this.created = created;
-            return this;
-        }
-
-        public CommentBuilder lastModified(LocalDateTime lastModified) {
-            this.lastModified = lastModified;
-            return this;
-        }
-
-        public CommentBuilder text(T text) {
-            this.text = text;
-            return this;
-        }
+    public void changeContent(User modifiedBy, T content) {
+        this.content = content;
+        this.modifiedBy = modifiedBy;
+        this.modifiedAt = LocalDateTime.now();
 
     }
+
+    //    public static class CommentBuilder<T> {
+//
+//        private User creatorName;
+//        private User modifiedBy;
+//        private LocalDateTime createdAt;
+//        private LocalDateTime modifiedAt;
+//        private T content;
+//
+//        public CommentBuilder() {
+//        }
+//
+//        public CommentBuilder creatorName(String creatorName) {
+//            this.creatorName = creatorName;
+//            return this;
+//        }
+//
+//        public CommentBuilder modifiedBy(String modifiedBy) {
+//            this.modifiedBy = modifiedBy;
+//            return this;
+//        }
+//
+//        public CommentBuilder createdAt(LocalDateTime createdAt) {
+//            this.createdAt = createdAt;
+//            return this;
+//        }
+//
+//        public CommentBuilder modifiedAt(LocalDateTime modifiedAt) {
+//            this.modifiedAt = modifiedAt;
+//            return this;
+//        }
+//
+//        public CommentBuilder content(T content) {
+//            this.content = content;
+//            return this;
+//        }
+//
+//        public Comment build() {
+//            return new Comment(this);
+//        }
+
+//    }
 
 }

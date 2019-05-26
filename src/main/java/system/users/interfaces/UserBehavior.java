@@ -1,6 +1,8 @@
 package system.users.interfaces;
 
-public interface UserBehavior<T> {
+import java.io.Serializable;
+
+public interface UserBehavior<T> extends Serializable {
 
     void doSomething(T obj);
 }

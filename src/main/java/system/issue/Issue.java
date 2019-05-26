@@ -1,17 +1,18 @@
 package system.issue;
 
+import system.comment.Comment;
 import system.observers.Observer;
-import system.observers.ObserverMethod;
 import system.observers.Publisher;
 import system.observers.Subject;
 import system.users.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Issue implements Publisher, Subject {
+public class Issue implements Publisher, Subject, Serializable {
     private static AtomicInteger idGenerator = new AtomicInteger();
 
     private final int id;
@@ -21,6 +22,8 @@ public class Issue implements Publisher, Subject {
     private User assignUser;
     private IssueType type;
     private IssuePriority priority;
+
+    private List<Comment> commentList;
 
     private List<Observer> observerList; //Observer interface, to have users, admins, etc
 
@@ -38,6 +41,7 @@ public class Issue implements Publisher, Subject {
         this.assignUser = builder.assignUser;
         this.type = builder.type;
         this.priority = builder.priority;
+        this.commentList = new ArrayList<>();
         this.observerList = new ArrayList<>();
     }
 
@@ -92,6 +96,15 @@ public class Issue implements Publisher, Subject {
                         return new IssueWrapper(this);
                     });
                 });
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void addComment(Comment c) {
+        commentList.add(c);
+        publish();
     }
 
     public static class IssueBuilder {
