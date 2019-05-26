@@ -1,10 +1,14 @@
 package system.issue;
 
 import system.observers.Observer;
+import system.observers.ObserverMethod;
 import system.observers.Publisher;
 import system.observers.Subject;
 import system.users.User;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Issue implements Publisher, Subject {
@@ -18,6 +22,14 @@ public class Issue implements Publisher, Subject {
     private IssueType type;
     private IssuePriority priority;
 
+    private List<Observer> observerList; //Observer interface, to have users, admins, etc
+
+    protected Issue() {
+        id = -1;
+        title = "";
+        creator = null;
+    }
+
     private Issue(IssueBuilder builder) {
         this.id = Issue.idGenerator.incrementAndGet();
         this.title = builder.title;
@@ -26,6 +38,29 @@ public class Issue implements Publisher, Subject {
         this.assignUser = builder.assignUser;
         this.type = builder.type;
         this.priority = builder.priority;
+        this.observerList = new ArrayList<>();
+    }
+
+    public void changeDescription(String newDescription) {
+        this.description = newDescription;
+        this.publish();
+    }
+
+    public void setAssignUser(User user) {
+        this.assignUser = user;
+        Optional<Observer> foundObserver = this.observerList.stream()
+                .filter(p -> p.equals(user))
+                .findAny();
+        Observer observer = foundObserver.orElse(p -> System.out.println("Observer not found"));
+
+        observer.notify(() -> {
+            System.out.println("Zostałeś przypisany do issue id = [" + this.id + "]");
+            return new IssueWrapper(this);
+        });
+    }
+
+    public int getId() {
+        return id;
     }
 
     public static IssueBuilder builder() {
@@ -34,22 +69,29 @@ public class Issue implements Publisher, Subject {
 
     @Override
     public void publish() {
-
+        System.out.println("Description has been modified");
+        notifyObservers();
     }
 
     @Override
-    public void assignSubject(Observer o) {
-
+    public void assignToSubject(Observer o) {
+        this.observerList.add(o);
     }
 
     @Override
     public void unassignFromSubject(Observer o) {
-
+        this.observerList.remove(o);
     }
 
     @Override
     public void notifyObservers() {
-
+        this.observerList.stream()
+                .forEach(observer -> {
+                    observer.notify(() -> {
+                        System.out.println("Issue with title = [" + this.title + "] has changed");
+                        return new IssueWrapper(this);
+                    });
+                });
     }
 
     public static class IssueBuilder {

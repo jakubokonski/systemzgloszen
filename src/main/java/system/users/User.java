@@ -6,7 +6,7 @@ import system.users.interfaces.UserBehavior;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class User implements Observer {
+public abstract class User<T> implements Observer<T> {
 
     private static AtomicInteger idGenerator = new AtomicInteger();
 //    private static Integer idGenerator = 0;
@@ -57,5 +57,14 @@ public abstract class User implements Observer {
 
     public void setBehavior(UserBehavior behavior) {
         this.behavior = behavior;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

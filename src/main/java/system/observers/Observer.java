@@ -1,5 +1,5 @@
 package system.observers;
 
-public interface Observer {
-    void observe(ObserverMethod p);
+public interface Observer<T> {
+    void notify(ObserverMethod<T> p);
 }
