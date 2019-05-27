@@ -1,13 +1,19 @@
 package system;
 
-import system.command.CommandFactory;
+import system.command.factory.CommandFactory;
 import system.command.Command;
 import system.command.ShowHelpCommand;
+import system.exporter.DefaultFileIssueExporter;
+import system.exporter.ExporterFactory;
+import system.issue.Issue;
+import system.issue.IssuePriority;
+import system.issue.IssueType;
 import system.users.RoleType;
 import system.users.SimplyUser;
 import system.users.User;
 import system.users.behaveImp.DefaultBehavior;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class MainClass {
@@ -17,27 +23,34 @@ public class MainClass {
 
     public static void main(String[] args) {
 
-        Scanner input = new Scanner(System.in);
-        String name;
-        String surname;
-        issueSystem = IssueSystem.getInstance();
-
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Name:");
-        name = input.nextLine();
+        String name = scanner.nextLine();
         System.out.println("Surname:");
-        surname = input.nextLine();
+        String surname = scanner.nextLine();
 
         loggedInUser = new SimplyUser(name, surname, RoleType.MOD, new DefaultBehavior());
-        issueSystem.userList.add(loggedInUser);
+        Issue issue = Issue.builder()
+                .creator(loggedInUser)
+                .assignUser(loggedInUser)
+                .priority(IssuePriority.HIGH)
+                .type(IssueType.ERROR)
+                .description("Description")
+                .title("Title")
+                .build();
 
-        ShowHelpCommand showHelpCommand = ShowHelpCommand.getInstance();
-        showHelpCommand.getInstance().execute();
+        IssueSystem.getInstance().getIssueList().add(issue);
+        IssueSystem.getInstance().getUserList().add(loggedInUser);
 
+        DefaultFileIssueExporter exporter = ExporterFactory.getExporter(Integer.valueOf(0).shortValue());
+        File export = exporter.export(IssueSystem.getInstance().getIssueList());
+
+        ShowHelpCommand.getInstance().execute();
 
         while (true) {
-            int i = input.nextInt();
+            int i = scanner.nextInt();
             Command command = CommandFactory.getCommand(i);
-
+            command.execute();
         }
     }
 }

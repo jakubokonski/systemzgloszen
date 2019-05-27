@@ -7,19 +7,19 @@ import system.users.User;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class AssigneOtherUserToIssueCommand implements Command {
+public class AssignOtherUserToIssueCommand implements Command {
 
 
     private static class Singleton {
-        private static final AssigneOtherUserToIssueCommand INSTANCE =
-                new AssigneOtherUserToIssueCommand();
+        private static final AssignOtherUserToIssueCommand INSTANCE =
+                new AssignOtherUserToIssueCommand();
     }
 
-    private AssigneOtherUserToIssueCommand() {
+    private AssignOtherUserToIssueCommand() {
 
     }
 
-    public static AssigneOtherUserToIssueCommand getInstance() {
+    public static AssignOtherUserToIssueCommand getInstance() {
         return Singleton.INSTANCE;
     }
 

@@ -1,11 +1,13 @@
-package system.command;
+package system.command.factory;
 
-import static system.MainClass.issueSystem;
+import system.command.*;
 
-public class CommandFactory implements Command {
+public class CommandFactory {
 
     public static Command getCommand(int id) {
         switch (id) {
+            case -1:
+                return SystemExitCommand.getInstance();
             case 1:
                 return ShowIssuesCommand.getInstance();
             case 2:
@@ -17,16 +19,13 @@ public class CommandFactory implements Command {
             case 5:
                 return ModifyIssueDescriptionCommand.getInstance();
             case 6:
-                return AssigneOtherUserToIssueCommand.getInstance();
+                return AssignOtherUserToIssueCommand.getInstance();
+            case 7:
+                AddStringCommentCommand.getInstance();
             case 0:
                 return ShowHelpCommand.getInstance();
             default:
                 return ShowHelpCommand.getInstance();
         }
-    }
-
-    @Override
-    public void execute() {
-
     }
 }

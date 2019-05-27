@@ -3,10 +3,11 @@ package system.command;
 public class SystemExitCommand implements Command {
 
 	private static class SystemExitCommandSingleton {
-		private static final SystemExitCommand INSTANCE = new SystemExitCommand();
+		private static final SystemExitCommand INSTANCE =
+			new SystemExitCommand();
 	}
 
-	public SystemExitCommand getInstance() {
+	public static SystemExitCommand getInstance() {
 		return SystemExitCommandSingleton.INSTANCE;
 	}
 
